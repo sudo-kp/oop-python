@@ -1,0 +1,12 @@
+[
+ {
+  "number": "cef7ac62-dd9c-4f87-a6e4-021d3f64e615",
+  "event": "Event A on 2022-12-05 00:00:00 costs 30, 48 tickets left",
+  "customer": "Anna Sydorenko"
+ },
+ {
+  "number": "a572bc16-d568-4b3a-9153-5442a5624098",
+  "event": "Event A on 2022-12-05 00:00:00 costs 30, 48 tickets left",
+  "customer": "Kate Brown"
+ }
+]
