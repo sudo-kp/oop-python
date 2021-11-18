@@ -156,12 +156,8 @@ class PizzaOfTheDay:
         self.__size = size
 
     def __str__(self):
-        a = []
-        for item in self.pizza_ingredients:
-            a.append(str(item))
-        b = []
-        for item in self.extra_ingredients:
-            b.append(str(item))
+        a = [str(item) for item in self.pizza_ingredients]
+        b = [str(item) for item in self.extra_ingredients]
         return f"Pizza: {a} with extra {b}, size: {self.size}"
 
 
@@ -216,9 +212,7 @@ class Cart:
         self.items = items
 
     def __str__(self):
-        a = []
-        for item in self.items:
-            a.append(str(item))
+        a = [str(item) for item in self.items]
         return f'{a}'
 
 
