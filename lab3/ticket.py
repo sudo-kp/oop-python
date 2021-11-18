@@ -2,9 +2,12 @@ import datetime
 import json
 import os
 import uuid
+from json import JSONEncoder
 
 all_tickets = []
 
+DAY_FOR_ADVANCE = 60
+DAY_FOR_LATE = 10
 
 class Event:
     def __init__(self, name="noname", date=None,
@@ -94,9 +97,9 @@ class Event:
         self.num_of_tickets -= 1
         if person.is_student:
             return StudentTicket
-        if self.date - date == datetime.timedelta(60):
+        if self.date - date == datetime.timedelta(DAY_FOR_ADVANCE):
             return AdvancedTicket
-        if self.date - date == datetime.timedelta(10):
+        if self.date - date == datetime.timedelta(DAY_FOR_LATE):
             return LateTicket
         return Ticket
 
@@ -117,6 +120,13 @@ class Person:
         return f"{self.name} {self.surname}"
 
 
+class TicketEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Ticket):
+            return {"number": obj.number, "event": obj.event.__str__(), "customer": obj.person.__str__()}
+        return json.JSONEncoder.default(self, obj)
+
+
 class Ticket:
     def __init__(self, evnt, person):
         if not isinstance(evnt, Event):
@@ -125,10 +135,13 @@ class Ticket:
         self.number = uuid.uuid4().__str__()
         self.person = person
         all_tickets.append(self)
+        with open("tickets.json", "w") as file:
+            json.dump(all_tickets, file, indent=1, cls=TicketEncoder)
 
     def __str__(self):
         return f"Ticket: {self.number} on event {self.event.name}\nfor {self.person}"
 
+    @property
     def price(self):
         return self.event.entry_fee
 
@@ -145,16 +158,19 @@ LATE_ADD = 1.1
 
 
 class AdvancedTicket(Ticket):
+    @property
     def price(self):
         return self.event.entry_fee * ADVANCED_DISCOUNT
 
 
 class StudentTicket(Ticket):
+    @property
     def price(self):
         return self.event.entry_fee * STUDENT_DISCOUNT
 
 
 class LateTicket(Ticket):
+    @property
     def price(self):
         return self.event.entry_fee * LATE_ADD
 
@@ -178,4 +194,6 @@ print(ticket1)
 print(ticket2)
 print(find_ticket(ticket2.number))
 print(event)
+
+
 
