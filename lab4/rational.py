@@ -1,7 +1,10 @@
 from math import gcd, lcm
 
-"""DOCKSTRING"""
+
 class Rational:
+    """Class for realization of Rational numbers. It has two fields: numerator and denominator.
+    Constructor gets two parameters to initialize numerator and denominator. It has properties for getting and setting
+    data. The arithmetic and comparison operators are overloaded."""
     def __init__(self, numerator=0, denominator=1):
         tmp = gcd(abs(numerator), abs(denominator))
         if denominator < 0:
@@ -114,3 +117,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
