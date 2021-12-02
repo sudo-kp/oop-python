@@ -1,38 +1,44 @@
 MONTHS_NUM = 12
 DAYS_IN_YEAR_NUM = 365
 
-"""DOCKSTRING"""
-class Day:
+
+class Days:
+    """Class for storing number of days."""
     def __init__(self, day):
         if not isinstance(day, int):
             raise TypeError("wrong day.")
         self.day = day
 
     def __neg__(self):
-        return Day(-self.day)
+        return Days(-self.day)
 
 
-class Month:
+class Months:
+    """Class for storing number of months."""
     def __init__(self, month):
         if not isinstance(month, int):
             raise TypeError("wrong day.")
         self.month = month
 
     def __neg__(self):
-        return Month(-self.month)
+        return Months(-self.month)
 
 
-class Year:
+class Years:
+    """Class for storing number of years."""
     def __init__(self, year):
         if not isinstance(year, int):
             raise TypeError("wrong day.")
         self.year = year
 
     def __neg__(self):
-        return Year(-self.year)
+        return Years(-self.year)
 
 
 class Calendar:
+    """Class for realization of calendar with fields: day, month and year, also boolean value is the year high.
+    Fields are initializing by constructors parameters and year has properties for setting and getting data
+    and determining if it is high. Assignment and comparison operators are overloaded."""
     day_month = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     days_number_in_year = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
     days_number_in_high_year = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366]
@@ -100,13 +106,13 @@ class Calendar:
         self.__month = new_month
 
     def __iadd__(self, other):
-        if not isinstance(other, (Day, Month, Year)):
+        if not isinstance(other, (Days, Months, Years)):
             return NotImplemented
-        if isinstance(other, Day):
+        if isinstance(other, Days):
             self.add_days(other.day)
-        if isinstance(other, Month):
+        if isinstance(other, Months):
             self.add_month(other.month)
-        if isinstance(other, Year):
+        if isinstance(other, Years):
             self.year += other.year
         return self
 
@@ -153,7 +159,7 @@ class Calendar:
 def main():
     obj = Calendar(1, 1, 2021)
     print(obj)
-    obj -= Day(893)
+    obj -= Days(893)
     print(obj)
 
 
