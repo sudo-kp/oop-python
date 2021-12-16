@@ -4,6 +4,7 @@ DAYS_IN_YEAR_NUM = 365
 
 class Days:
     """Class for storing number of days."""
+
     def __init__(self, day):
         if not isinstance(day, int):
             raise TypeError("wrong day.")
@@ -15,6 +16,7 @@ class Days:
 
 class Months:
     """Class for storing number of months."""
+
     def __init__(self, month):
         if not isinstance(month, int):
             raise TypeError("wrong day.")
@@ -26,6 +28,7 @@ class Months:
 
 class Years:
     """Class for storing number of years."""
+
     def __init__(self, year):
         if not isinstance(year, int):
             raise TypeError("wrong day.")
@@ -66,12 +69,7 @@ class Calendar:
         if year < 0:
             raise ValueError("Wrong year value.")
         self.__year = year
-        if year % 4:
-            self.__is_high = False
-        elif not year % 100 and year % 400:
-            self.__is_high = False
-        else:
-            self.__is_high = True
+        self.__is_high = False if year % 4 or not year % 100 and not year % 400 else True
 
     def day_by_number(self, day_in_year):
         if not 0 < day_in_year <= DAYS_IN_YEAR_NUM + int(self.__is_high):
@@ -85,7 +83,7 @@ class Calendar:
 
     def add_days(self, days):
         new_day = self.days_number_in_year[self.__month - 1] + self.__day + days
-        while not 0 < new_day <= DAYS_IN_YEAR_NUM + int(self.__is_high):
+        while new_day // (DAYS_IN_YEAR_NUM + int(self.__is_high)):
             if new_day <= 0:
                 self.year -= 1
                 new_day = DAYS_IN_YEAR_NUM + int(self.__is_high) + new_day
@@ -96,13 +94,13 @@ class Calendar:
 
     def add_month(self, months):
         new_month = self.__month + months
-        while not 0 < new_month <= MONTHS_NUM:
-            if new_month <= 0:
-                self.year -= 1
-                new_month = MONTHS_NUM + new_month
-            if new_month > 12:
-                self.year += 1
-                new_month -= MONTHS_NUM
+        periods = new_month // MONTHS_NUM
+        if new_month <= 0:
+            self.year -= periods
+            new_month = MONTHS_NUM + new_month
+        if new_month > 12:
+            self.year += periods
+            new_month -= MONTHS_NUM
         self.__month = new_month
 
     def __iadd__(self, other):
@@ -159,7 +157,9 @@ class Calendar:
 def main():
     obj = Calendar(1, 1, 2021)
     print(obj)
-    obj -= Days(893)
+    obj -= Days(55)
+    print(obj)
+    obj -= Months(5)
     print(obj)
 
 
