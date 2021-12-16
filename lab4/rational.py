@@ -5,11 +5,12 @@ class Rational:
     """Class for realization of Rational numbers. It has two fields: numerator and denominator.
     Constructor gets two parameters to initialize numerator and denominator. It has properties for getting and setting
     data. The arithmetic and comparison operators are overloaded."""
+
     def __init__(self, numerator=0, denominator=1):
-        tmp = gcd(abs(numerator), abs(denominator))
         if denominator < 0:
             numerator = -numerator
             denominator = -denominator
+        tmp = gcd(abs(numerator), abs(denominator))
         self.numerator = numerator // tmp
         self.denominator = denominator // tmp
 
@@ -47,14 +48,14 @@ class Rational:
     def __mul__(self, other):
         if isinstance(other, int):
             other = Rational(other, 1)
-        if not isinstance(other, Rational):
+        elif not isinstance(other, Rational):
             return NotImplemented
         return Rational(self.numerator * other.numerator, self.denominator * other.denominator)
 
     def __add__(self, other):
         if isinstance(other, int):
             other = Rational(other, 1)
-        if not isinstance(other, Rational):
+        elif not isinstance(other, Rational):
             return NotImplemented
         if self.denominator == other.denominator:
             return Rational(self.numerator + other.numerator, self.denominator)
@@ -67,14 +68,14 @@ class Rational:
     def __truediv__(self, other):
         if isinstance(other, int):
             other = Rational(other, 1)
-        if not isinstance(other, Rational):
+        elif not isinstance(other, Rational):
             return NotImplemented
         return self.__mul__(Rational(other.denominator, other.numerator))
 
     def __eq__(self, other):
         if isinstance(other, int):
             other = Rational(other, 1)
-        if not isinstance(other, Rational):
+        elif not isinstance(other, Rational):
             return NotImplemented
         return (self.numerator, self.denominator) == (other.numerator, other.denominator)
 
@@ -84,7 +85,7 @@ class Rational:
     def __lt__(self, other):
         if isinstance(other, int):
             other = Rational(other, 1)
-        if not isinstance(other, Rational):
+        elif not isinstance(other, Rational):
             return NotImplemented
         if self.denominator == other.denominator:
             return self.numerator < other.numerator
@@ -100,6 +101,23 @@ class Rational:
     def __ge__(self, other):
         return not self.__lt__(other)
 
+    def __iadd__(self, other):
+        if isinstance(other, int):
+            other = Rational(other, 1)
+        elif not isinstance(other, Rational):
+            return NotImplemented
+        if self.denominator == other.denominator:
+            self.numerator = self.numerator + other.numerator
+        tmp = lcm(self.denominator, other.denominator)
+        tmp_gcd = gcd(abs(self.numerator), abs(self.denominator))
+        self.numerator = (self.numerator * tmp // self.denominator +
+                          other.numerator * tmp // other.denominator) // tmp_gcd
+        self.denominator = tmp // tmp_gcd
+        return self
+
+    def __isub__(self, other):
+        return self.__iadd__(-other)
+
 
 def main():
     obj1 = Rational(1, 2)
@@ -107,14 +125,15 @@ def main():
     obj2 = Rational(2, 3)
     obj3 = Rational(1, 2)
     print(obj1 - obj2)
-    print(obj1*obj2)
-    print(obj2/obj1)
+    print(obj1 * obj2)
+    print(obj2 / obj1)
     print(obj1 == obj3)
     print(obj1 <= obj2)
     print(obj1 > obj2)
     print(obj1 >= obj3)
+    obj1 += 5
+    print(obj1)
 
 
 if __name__ == '__main__':
     main()
-
